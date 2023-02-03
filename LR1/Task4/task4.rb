@@ -11,3 +11,10 @@ def elems_b4_1st_min(arr)
   arr_min = arr.min
   arr[0, arr.index(arr_min)]
 end
+
+def local_max?(arr, idx)
+  idx = Integer(idx)
+  return false unless idx.between?(1, arr.length - 2)
+
+  arr[idx - 1] <= arr[idx] and arr[idx + 1] <= arr[idx]
+end
