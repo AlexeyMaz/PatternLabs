@@ -24,3 +24,8 @@ def elems_less_than_avg(arr)
   avg = arr.sum / arr.length.to_f
   arr.filter { |x| x < avg }
 end
+
+# элементы, встречающиеся более трех 3 раз
+def elems_more_than_3_times(arr)
+  arr.filter { |x| arr.count(x) > 3 }.uniq
+end
