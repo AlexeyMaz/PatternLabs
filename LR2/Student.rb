@@ -1,58 +1,93 @@
 require 'json'
+require_relative 'student_short'
 
-class Student
-  attr_accessor :id
+class Student < StudentShort
+  attr_writer :id
   attr_accessor :surname, :name, :patronymic, :phone, :telegram, :email, :git
 
-  PHONE_REGEX = /\A(\+7|8)\d{10}\z/
-  TELEGRAM_REGEX = /^@[A-Za-z0-9\-_]+$/
-  EMAIL_REGEX = /^[A-Za-z0-9\-_]+@[A-Za-z]+\.([A-Za-z]+\.)*[A-Za-z]+$/
+  # валидаторы
+  def self.valid_phone?(phone)
+    phone.match(/\A(\+7|8)\d{10}\z/)
+  end
 
-  def initialize(surname, name, patronymic, options = {})
+  def self.valid_name?(name)
+    name.match(/^[А-Я][а-я]+$/)
+  end
+
+  def self.valid_acc?(account)
+    account.match(/^@[A-Za-z0-9\-_]+$/)
+  end
+
+  def self.valid_email?(email)
+    email.match(/^[A-Za-z0-9\-_]+@[A-Za-z]+\.([A-Za-z]+\.)*[A-Za-z]+$/)
+  end
+
+
+  # стандартный конструктор
+  def initialize(surname, name, patronymic, id: nil, git: nil, phone: nil, email: nil, telegram: nil)
     self.surname = surname
     self.name = name
     self.patronymic = patronymic
-    self.id = options[:id]
-    self.phone = options[:phone]
-    self.git = options[:git]
-    self.telegram = options[:telegram]
-    self.email = options[:email]
+    self.id = id
+    self.git = git
+    set_contacts(phone: phone, email: email, telegram: telegram)
+  end
+
+  # конструктор из json-строки
+  def self.init_from_json(str)
+    result = JSON.parse(str)
+    raise ArgumentError,"The argument must have surname, name, and patronymic" unless
+      (result.has_key?('surname') and result.has_key?('name') and result.has_key?('patronymic'))
+
+    name = result.delete('name')
+    patronymic = result.delete('patronymic')
+    surname = result.delete('surname')
+    Student.new(surname, name, patronymic, **result.transform_keys(&:to_sym))
   end
 
   # сеттеры
-  def phone=(value)
-    if value && !value.match(PHONE_REGEX)
-      raise ArgumentError.new("Неправильный формат номера телефона: #{value}")
-    end
-    @phone = value
+  def phone=(phone)
+    raise ArgumentError, "Incorrect value: phone=#{phone}!" if !phone.nil? && !Student.valid_phone?(phone)
+
+    @phone = phone
   end
 
-  def telegram=(value)
-    if value && !value.match(TELEGRAM_REGEX)
-      raise ArgumentError.new("Неправильный формат телеграма: #{value}")
-    end
-    @telegram = value
+  def name=(name)
+    raise ArgumentError, "Incorrect value: name=#{name}!" if !name.nil? && !Student.valid_name?(name)
+
+    @name = name
   end
 
-  def email=(value)
-    if value && !value.match(EMAIL_REGEX)
-      raise ArgumentError.new("Неправильный формат эл. почты: #{value}")
-    end
-    @email = value
+  def surname=(surname)
+    raise ArgumentError, "Incorrect value: surname=#{surname}!" if !surname.nil? && !Student.valid_name?(surname)
+
+    @surname = surname
   end
 
-  # валидаторы для гита и контактов
-  def git?
-    !git.nil?
+  def patronymic=(patronymic)
+    raise ArgumentError, "Incorrect value: patronymic=#{patronymic}!" if !patronymic.nil? && !Student.valid_name?(patronymic)
+
+    @patronymic = patronymic
   end
 
-  def contacts?
-    !phone.nil? || !telegram.nil? || !email.nil?
+  def git=(git)
+    raise ArgumentError, "Incorrect value: git=#{git}!" if !git.nil? && !Student.valid_acc?(git)
+
+    @git = git
   end
 
-  def validate
-    git? && contacts?
+  def telegram=(telegram)
+    raise ArgumentError, "Incorrect value: telegram=#{telegram}!" if !telegram.nil? && !Student.valid_acc?(telegram)
+
+    @telegram = telegram
   end
+
+  def email=(email)
+    raise ArgumentError, "Incorrect value: email=#{email}!" if !email.nil? && !Student.valid_email?(email)
+
+    @email = email
+  end
+
 
   # сеттер контактов
   def set_contacts(phone:@phone, telegram:@telegram, email:@email)
@@ -67,33 +102,28 @@ class Student
   end
 
   # контакты студента
-  def contacts
-    return "phone= #{phone}" unless phone.nil?
-    return "telegram= #{telegram}" unless telegram.nil?
-    return "email= #{email}" unless email.nil?
+  def contact
+    return "phone: #{phone}" unless phone.nil?
+    return "telegram: #{telegram}" unless telegram.nil?
+    return "email: #{email}" unless email.nil?
 
     nil
   end
 
   # короткая инфа о студенте
   def get_info
-    "#{surname_n_initials}, Git: #{git}, #{contacts}"
-  end
-
-  # парсинг строки и исключения
-  def self.pars_str(str)
-    result = JSON.parse(str)
-    raise ArgumentError,"The argument must have surname, name, and patronymic" unless
-      (result.has_key?('surname') and result.has_key?('name') and result.has_key?('patronymic'))
-
-    name = result.delete('name')
-    patronymic = result.delete('patronymic')
-    surname = result.delete('surname')
-    Student.new(surname, name, patronymic, **result.transform_keys(&:to_sym))
+    "#{surname_n_initials}, Git: #{git}, #{contact}"
   end
 
   def to_s
-    "id: #{@id}, surname: #{@surname}, name: #{@name}, patronymic: #{@patronymic}, phone: #{@phone}, telegram: #{@telegram}, email: #{@email}, git: #{@git}\n"
+    result = "#{surname} #{name} #{patronymic}"
+    result += " id=#{id}" unless id.nil?
+    result += " phone=#{phone}" unless phone.nil?
+    result += " git=#{git}" unless git.nil?
+    result += " telegram=#{telegram}" unless telegram.nil?
+    result += " email=#{email}" unless email.nil?
+
+    result
   end
 
 end

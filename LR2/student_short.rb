@@ -1,37 +1,60 @@
 require 'json'
 
 class StudentShort
-  attr_reader :id, :git, :contact
+  attr_reader :id, :git, :contact, :surname, :initials
 
-  def initialize(id, info_str)
-    self.id = id
-    result = JSON.parse(info_str)
+  # стандартный конструктор, принимающий аргументов экземпляр класса student
+  def initialize(student)
+    @id = student.id
+
+    @surname = student.surname
+    @initials = "#{student.name[0]}. #{student.patronymic[0]}."
+    @git = student.git unless student.git.nil?
+    @contact = student.contact
+  end
+
+  # конструктор, принимающий на вход id и строку, которая содержит всю остальную инфу
+  def self.from_str(id, str)
+    result = JSON.parse(str)
     raise ArgumentError,"The argument must have surname, name, and patronymic" unless
       (result.has_key?('surname') and result.has_key?('name') and result.has_key?('patronymic'))
 
-    @surname = result['surname']
-    @initials = "#{result['name'][0]}. #{result['patronymic'][0]}."
-    set_contacts(result)
+    StudentShort.new(Student.new(result['surname'],result['name'],result['patronymic'],id: id,
+                                 phone: result['phone'], git: result['git'],
+                                 email: result['email'],telegram: result['telegram']))
   end
 
-  def self.from_student(student)
-    info = { surname: student.surname, name: student.name, patronymic: student.patronymic,
-             git: student.git, email: student.email, phone: student.phone, telegram: student.telegram }
-    StudentShort.new(student.id, JSON.generate(info))
+  def surname_n_initials
+    "#{surname} #{name[0]}. #{patronymic[0]}."
   end
 
-  def last_name_and_initials
-    "#{last_name} #{initials}"
+  def git?
+    !git.nil?
+  end
+
+  def contact?
+    !contact.nil?
+  end
+
+  def validate?
+    git? && contact?
+  end
+
+  def to_s
+    result = surname_n_initials
+    result += " id= #{id} " unless id.nil?
+    result += contact unless contact.nil?
+
+    result
   end
 
   private
 
-  attr_reader :last_name, :initials
+  # def set_contacts(contacts)
+  #   return @contact = contacts['phone'] if contacts.key?('phone')
+  #   return @contact = contacts['telegram'] if contacts.key?('telegram')
+  #
+  #   @contact = contacts['email'] if contacts.key?('email')
+  # end
 
-  def set_contacts(contacts)
-    return @contact = contacts['phone'] if contacts.key?('phone')
-    return @contact = contacts['telegram'] if contacts.key?('telegram')
-
-    @contact = contacts['email'] if contacts.key?('email')
-  end
 end
