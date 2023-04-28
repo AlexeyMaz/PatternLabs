@@ -55,6 +55,24 @@ class Student
     self.email = email
   end
 
+  def surname_n_initials
+    "#{surname} #{name[0]}. #{patronymic[0]}."
+  end
+
+  def contacts
+    return "phone= #{phone}" unless phone.nil?
+    return "telegram= #{telegram}" unless telegram.nil?
+    return "email= #{email}" unless email.nil?
+
+    nil
+  end
+
+  def get_info
+    "#{surname_n_initials}, Git: #{git}, #{contacts}"
+  end
+
+
+
   def to_s
     "id: #{@id}, surname: #{@surname}, name: #{@name}, patronymic: #{@patronymic}, phone: #{@phone}, telegram: #{@telegram}, email: #{@email}, git: #{@git}\n"
   end
