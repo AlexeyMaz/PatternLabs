@@ -1,6 +1,9 @@
 require_relative 'Student'
 
-stud1 = Student.new(id: 1, surname: "Уайт", name: "Уолтер", patronymic: "Хартвелл", phone: '89001231231', git: 'dfs')
+stud1 = Student.new("Уайт","Уолтер", "Хартвелл", {id: 1, phone: '89001231231', git: 'dfs'})
 
 stud1.set_contacts(telegram: '@heisenberg')
-print stud1.get_info
+print stud1.to_s
+
+puts Student.pars_str('{"surname": "Дженсен", "name": "Адам", "patronymic": "Никогдаобэтомнепросилович",
+                      "id": 2, "phone_number": "+79180451280"}')
