@@ -49,6 +49,12 @@ class Student
     git? && contacts?
   end
 
+  def set_contacts(phone:@phone, telegram:@telegram, email:@email)
+    self.phone = phone
+    self.telegram = telegram
+    self.email = email
+  end
+
   def to_s
     "id: #{@id}, surname: #{@surname}, name: #{@name}, patronymic: #{@patronymic}, phone: #{@phone}, telegram: #{@telegram}, email: #{@email}, git: #{@git}\n"
   end
