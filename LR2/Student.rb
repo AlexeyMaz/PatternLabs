@@ -74,4 +74,8 @@ class Student
     @git=git
   end
 
+  def to_s
+    "id: #{@id}, lastname: #{@lastName}, Name: #{@name}, midlename: #{@midleName}, telegram #{@telegram}, email #{@email}, git: #{@git}\n"
+  end
+
 end
