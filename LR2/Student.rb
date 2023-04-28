@@ -37,6 +37,18 @@ class Student
     @email = value
   end
 
+  def git?
+    !git.nil?
+  end
+
+  def contacts?
+    !phone.nil? || !telegram.nil? || !email.nil?
+  end
+
+  def validate
+    git? && contacts?
+  end
+
   def to_s
     "id: #{@id}, surname: #{@surname}, name: #{@name}, patronymic: #{@patronymic}, phone: #{@phone}, telegram: #{@telegram}, email: #{@email}, git: #{@git}\n"
   end
