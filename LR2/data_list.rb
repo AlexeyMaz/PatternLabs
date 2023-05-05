@@ -1,6 +1,5 @@
 class DataList
 
-  private_class_method :new
   # Сеттер для массива объектов
   attr_writer :objects_list
 

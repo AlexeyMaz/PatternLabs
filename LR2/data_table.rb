@@ -30,15 +30,3 @@ class DataTable
   attr_writer :rows_count, :cols_count
 
 end
-
-
-table = DataTable.new([
-                        [7, 2, 0],
-                        [5, 1, 4],
-                        [9, 5, 5]
-                      ])
-
-puts table.get_item(1, 2)
-puts table
-puts table.cols_count
-puts table.rows_count
