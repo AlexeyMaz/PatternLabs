@@ -1,6 +1,8 @@
 class DataList
 
   private_class_method :new
+  # Сеттер для массива объектов
+  attr_writer :objects_list
 
   def initialize(objects)
     self.objects_list = objects
@@ -36,7 +38,14 @@ class DataList
     raise NotImplementedError, 'Будет реализовано в наследнике'
   end
 
+  # Данный метод будет переопределен у наследника
+  def table_fields(object)
+    []
+  end
+
+
   private
 
-  attr_accessor :selected_objects, :objects_list
+  attr_reader :objects_list
+  attr_accessor :selected_objects
 end

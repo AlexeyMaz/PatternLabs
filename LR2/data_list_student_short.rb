@@ -1,10 +1,6 @@
 require_relative 'data_list'
 
 class DataListStudentShort < DataList
-  def initialize(objects)
-    super(objects)
-  end
-
   def get_names
     %w[last_name_and_initials git contact]
   end
@@ -12,16 +8,21 @@ class DataListStudentShort < DataList
   def get_data
     result = []
     id = 0
-    objects_list.each do |object|
+    objects_list.each do |obj|
       row = []
       row << id
-      row << object.last_name_and_initials
-      row << object.git
-      row << object.contact
+      row.push(*table_fields(obj))
       result << row
       id += 1
     end
-
     DataTable.new(result)
+  end
+
+
+  protected
+
+  # сеттер для массива объектов
+  def table_fields(object)
+    [object.last_name_and_initials, object.git, object.contact]
   end
 end
