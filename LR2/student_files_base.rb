@@ -1,14 +1,15 @@
 class StudentListBase
-  private_class_method :new
+  attr_writer :data_type
 
-  def initialize
+  def initialize(data_type)
     self.students = []
     self.cur_id = 1
+    @data_type = data_type
   end
 
   # Чтение из файла
   def read_from_file(file_path)
-    list = str_to_list(File.read(file_path))
+    list = @data_type.str_to_list(File.read(file_path))
     self.students = list.map { |h| Student.from_hash(h) }
     update_cur_id
   end
@@ -16,7 +17,7 @@ class StudentListBase
   # Запись в файл
   def write_to_file(file_path)
     list = students.map(&:to_hash)
-    File.write(file_path, list_to_str(list))
+    File.write(file_path, @data_type.list_to_str(list))
   end
 
   # Найти студента по айди
@@ -48,7 +49,7 @@ class StudentListBase
 
   # Замена студента
   def replace_student(student_id, student)
-    idx = student.find_index { |s| s.id == student_id }
+    idx = students.find_index { |s| s.id == student_id }
     students[idx] = student
   end
 
@@ -69,16 +70,12 @@ class StudentListBase
 
   protected
 
-  def str_to_list(str); end
-  def list_to_str(list); end
+  attr_accessor :students, :cur_id
 
   private
 
   # Метод для обновления cur_id
   def update_cur_id
-    self.cur_id = students.max_by(&:id).id + 1
+    self.cur_id = students.max_by(&:id).id.to_i + 1
   end
-
-
-  attr_accessor :students, :cur_id
 end

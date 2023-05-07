@@ -1,7 +1,7 @@
-require_relative 'student_files_base'
+require_relative 'student_list_strategy'
 require 'yaml'
 
-class StudentListYAML < StudentListBase
+class StudentListYAML < StudentListStrategy
   public_class_method :new
 
   protected

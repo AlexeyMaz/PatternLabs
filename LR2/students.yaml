@@ -1,0 +1,11 @@
+---
+- surname: Дженсен
+  name: Адам
+  patronymic: Техноментович
+  id: 1
+  telegram: "@classified"
+- surname: Уайт
+  name: Уолтер
+  patronymic: Хартвелл
+  id: 2
+  telegram: "@heisenberg"

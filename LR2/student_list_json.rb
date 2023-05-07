@@ -1,7 +1,7 @@
-require_relative 'student_files_base'
+require_relative 'student_list_strategy'
 require 'json'
 
-class StudentListJSON < StudentListBase
+class StudentListJSON < StudentListStrategy
   public_class_method :new
 
   protected

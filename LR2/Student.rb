@@ -3,7 +3,7 @@ require_relative 'student_short'
 
 class Student < StudentShort
   attr_writer :id
-  attr_accessor :surname, :name, :patronymic, :phone, :telegram, :email, :git
+  attr_reader :surname, :name, :patronymic, :phone, :telegram, :email, :git
 
   # валидаторы
   def self.valid_phone?(phone)
@@ -48,6 +48,15 @@ class Student < StudentShort
     patronymic = hash.delete(:patronymic)
 
     Student.new(name, surname, patronymic, **hash)
+  end
+
+  def to_hash
+    attrs = {}
+    %i[surname name patronymic id phone telegram email git].each do |attr|
+      attr_val = send(attr)
+      attrs[attr] = attr_val unless attr_val.nil?
+    end
+    attrs
   end
 
   # сеттеры
@@ -95,7 +104,7 @@ class Student < StudentShort
 
 
   # сеттер контактов
-  def set_contacts(phone:@phone, telegram:@telegram, email:@email)
+  def set_contacts(phone: @phone, telegram: @telegram, email: @email)
     self.phone = phone
     self.telegram = telegram
     self.email = email
