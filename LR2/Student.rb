@@ -35,14 +35,19 @@ class Student < StudentShort
 
   # конструктор из json-строки
   def self.init_from_json(str)
-    result = JSON.parse(str)
-    raise ArgumentError,"The argument must have surname, name, and patronymic" unless
-      (result.has_key?('surname') and result.has_key?('name') and result.has_key?('patronymic'))
+    params = JSON.parse(str, { symbolize_names: true })
+    from_hash(params)
+  end
 
-    name = result.delete('name')
-    patronymic = result.delete('patronymic')
-    surname = result.delete('surname')
-    Student.new(surname, name, patronymic, **result.transform_keys(&:to_sym))
+  # Конструктор, принимающий хэш
+  def self.from_hash(hash)
+    raise ArgumentError, 'Missing fields: surname, name, patronymic' unless hash.key?(:name) && hash.key?(:surname) && hash.key?(:patronymic)
+
+    name = hash.delete(:name)
+    surname = hash.delete(:surname)
+    patronymic = hash.delete(:patronymic)
+
+    Student.new(name, surname, patronymic, **hash)
   end
 
   # сеттеры
