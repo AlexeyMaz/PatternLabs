@@ -4,7 +4,7 @@ require_relative 'student_short'
 require_relative 'data_list_student_short'
 require_relative 'db_connection'
 
-class StudentListDB
+class StudentList_db_Adapter
   def initialize
     @db = DBConnection.instance
   end
@@ -49,10 +49,3 @@ class StudentListDB
     [student.surname, student.first_name, student.patronymic, student.phone, student.telegram, student.email, student.git]
   end
 end
-
-db_config = {
-  host: 'localhost',
-  username: 'root',
-  password: '12345',
-  database: 'student_db'
-}

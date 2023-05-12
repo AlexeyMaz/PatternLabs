@@ -1,7 +1,7 @@
 require 'mysql2'
-require_relative 'student_list_db'
+require_relative 'student_list_db_adapter'
 
-student_list = StudentListDB.new
+student_list = StudentList_db_Adapter.new
 
 student = student_list.student_by_id(1)
 puts student.inspect
