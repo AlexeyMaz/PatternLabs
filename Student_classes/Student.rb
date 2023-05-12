@@ -3,11 +3,11 @@ require_relative 'student_short'
 
 class Student < StudentShort
   attr_writer :id
-  attr_reader :surname, :name, :patronymic, :phone, :telegram, :email, :git
+  attr_reader :surname, :first_name, :patronymic, :phone, :telegram, :email, :git
 
   # валидаторы
   def self.valid_phone?(phone)
-    phone.match(/\A(\+7|8)\d{10}\z/)
+    phone.match(/\A(7|8)\d{10}\z/)
   end
 
   def self.valid_name?(name)
@@ -24,9 +24,9 @@ class Student < StudentShort
 
 
   # стандартный конструктор
-  def initialize(surname, name, patronymic, id: nil, git: nil, phone: nil, email: nil, telegram: nil)
+  def initialize(surname, first_name, patronymic, id: nil, git: nil, phone: nil, email: nil, telegram: nil)
     self.surname = surname
-    self.name = name
+    self.first_name = first_name
     self.patronymic = patronymic
     self.id = id
     self.git = git
@@ -41,13 +41,13 @@ class Student < StudentShort
 
   # Конструктор, принимающий хэш
   def self.from_hash(hash)
-    raise ArgumentError, 'Missing fields: surname, name, patronymic' unless hash.key?(:name) && hash.key?(:surname) && hash.key?(:patronymic)
+    raise ArgumentError, 'Missing fields: surname, first_name, patronymic' unless hash.key?(:first_name) && hash.key?(:surname) && hash.key?(:patronymic)
 
-    name = hash.delete(:name)
+    first_name = hash.delete(:first_name)
     surname = hash.delete(:surname)
     patronymic = hash.delete(:patronymic)
 
-    Student.new(name, surname, patronymic, **hash)
+    Student.new(surname, first_name, patronymic, **hash)
   end
 
   def to_hash
@@ -66,10 +66,10 @@ class Student < StudentShort
     @phone = phone
   end
 
-  def name=(name)
-    raise ArgumentError, "Incorrect value: name=#{name}!" if !name.nil? && !Student.valid_name?(name)
+  def first_name=(first_name)
+    raise ArgumentError, "Incorrect value: first_name=#{first_name}!" if !first_name.nil? && !Student.valid_name?(first_name)
 
-    @name = name
+    @first_name = first_name
   end
 
   def surname=(surname)
@@ -112,7 +112,7 @@ class Student < StudentShort
 
   # фамилия и инициалы
   def surname_n_initials
-    "#{surname} #{name[0]}. #{patronymic[0]}."
+    "#{surname} #{first_name[0]}. #{patronymic[0]}."
   end
 
   # контакты студента
@@ -130,7 +130,7 @@ class Student < StudentShort
   end
 
   def to_s
-    result = "#{surname} #{name} #{patronymic}"
+    result = "#{surname} #{first_name} #{patronymic}"
     result += " id=#{id}" unless id.nil?
     result += " phone=#{phone}" unless phone.nil?
     result += " git=#{git}" unless git.nil?
