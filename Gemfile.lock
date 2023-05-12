@@ -22,6 +22,7 @@ GEM
       super_module (~> 1.4.1)
     json (2.6.3)
     libui (0.1.2.pre)
+    libui (0.1.2.pre-x64-mingw)
     matrix (0.4.2)
     method_source (1.0.0)
     mysql2 (0.5.5)
@@ -55,6 +56,7 @@ GEM
     win32api (0.1.0)
 
 PLATFORMS
+  x64-mingw-ucrt
   x86-mingw32
 
 DEPENDENCIES
@@ -64,4 +66,4 @@ DEPENDENCIES
   win32api
 
 BUNDLED WITH
-   2.3.26
+   2.4.10
