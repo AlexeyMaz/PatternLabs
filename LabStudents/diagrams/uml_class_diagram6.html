@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram</title>
+</head>
+<body>
+  <script src="https://unpkg.com/graphre/dist/graphre.js"></script>
+  <script src="https://unpkg.com/nomnoml/dist/nomnoml.js"></script>
+
+  <canvas id="target-canvas"></canvas>
+  <script>
+      var canvas = document.getElementById('target-canvas');
+      var source = `#direction: right
+#zoom: 0.9
+
+#font: Roboto
+#fontSize: 20
+#leading: 2
+#padding: 12
+
+#fillArrows: true
+#arrowSize: 0.5
+#spacing: 130
+
+#lineWidth: 1.5
+#stroke: #33322E
+
+#.class: fill=#FEDCC4 title=bold
+#.module: fill=#D9E6FF title=bold
+[<class> TabStudentsController |
+  @view; @data_list |
+  +initialize(view); +on_view_created; +show_view; +refresh_data(page, per_page); +on_db_conn_error |
+  
+]
+[<class> Student |
+   |
+  +initialize(last_name, first_name, father_name, options); +last_name=(new_last_name); +first_name=(new_first_name); +father_name=(new_father_name); +set_contacts(phone, telegram, email); +last_name_and_initials; +short_info; +to_s; +to_hash; +to_json_str |
+  self.from_hash(hash); self.from_json_str(str)
+]
+[<class> StudentBase |
+   |
+  +initialize(id, phone, telegram, email, git); +short_contact; #phone=(new_phone); #telegram=(new_telegram); #git=(new_git); #email=(new_email); +has_contacts?; +has_git?; +valid? |
+  self.valid_name?(name); self.valid_phone?(phone); self.valid_profile_name?(profile_name); self.valid_email?(email)
+]
+[<class> StudentShort |
+   |
+  +initialize(id, info_str); +to_s |
+  self.from_student(student)
+]
+[<class> DBSourceAdapter |
+  @db |
+  +initialize; +student_by_id(student_id); +paginated_short_students(page, count, existing_data_list); +add_student(student); +replace_student(student_id, student); +remove_student(student_id); +student_count; -student_fields(student) |
+  
+]
+[<class> FileSourceAdapter |
+  @file_path; @file_source |
+  +initialize(data_transformer, file_path); +student_by_id(student_id); +paginated_short_students(page, count, existing_data_list); +add_student(student); +replace_student(student_id, student); +remove_student(student_id); +student_count |
+  
+]
+[<class> DataList |
+  @listeners |
+  +initialize(objects); +add_listener(listener); +remove_listener(listener); +notify; +select_element(number); +selected_id; +data_table; +replace_objects(objects); #table_fields(_obj); #column_names |
+  
+]
+[<class> DataListStudentShort |
+   |
+  +column_names; #table_fields(obj) |
+  
+]
+[<class> DataTable |
+   |
+  +initialize(table); +get_item(row, col); +to_2d_array; +to_s |
+  
+]
+[<class> DBDataSource |
+  @client |
+  +initialize; +prepare_exec(statement, params); +query(statement) |
+  self.instance
+]
+[<class> FileDataSource |
+   |
+  +initialize(data_transformer); +load_from_file(file_path); +save_to_file(file_path); +student_by_id(student_id); +paginated_short_students(page, count, existing_data_list); +sorted; +add_student(student); +replace_student(student_id, student); +remove_student(student_id); +student_count; -update_seq_id |
+  
+]
+[<class> DataTransformerBase |
+   |
+  #str_to_hash_list(str); #hash_list_to_str(hash_list) |
+  
+]
+[<class> DataTransformerJSON |
+   |
+  +str_to_hash_list(str); +hash_list_to_str(hash_list) |
+  
+]
+[<class> DataTransformerYAML |
+   |
+  +str_to_hash_list(str); +hash_list_to_str(hash_list) |
+  
+]
+[<class> StudentRepository |
+  @data_source_adapter |
+  +initialize(data_source_adapter); +student_by_id(student_id); +paginated_short_students(page, count, existing_data_list); +add_student(student); +replace_student(student_id, student); +remove_student(student_id); +student_count |
+  
+]
+[<class> MainWindow |
+  @view_tab_students |
+  +initialize; +create |
+  
+]
+[<class> TabStudents |
+  @controller; @current_page; @total_count |
+  +initialize; +on_create; +on_datalist_changed(new_table); +update_student_count(new_cnt); +contact_color(type); +create |
+  
+]
+[Student] inherits <:- [StudentBase]
+[StudentShort] inherits <:- [StudentBase]
+[DataListStudentShort] inherits <:- [DataList]
+[DataTransformerJSON] inherits <:- [DataTransformerBase]
+[DataTransformerYAML] inherits <:- [DataTransformerBase]
+[MainWindow] includes <- [Glimmer]
+[TabStudents] includes <- [Glimmer]
+`;
+      nomnoml.draw(canvas, source);
+  </script>
+</body>
+</html>
