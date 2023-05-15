@@ -1,5 +1,6 @@
 require 'glimmer-dsl-libui'
 require './LabStudents/controllers/tab_students_controller'
+require './LabStudents/views/student_input_form'
 
 class TabStudents
   include Glimmer
@@ -17,10 +18,12 @@ class TabStudents
     @controller.refresh_data(@current_page, STUDENTS_PER_PAGE)
   end
 
-  # Метод наблюдателя DataList
+  # Метод наблюдателя datalist
   def on_datalist_changed(new_table)
     arr = new_table.to_2d_array
-    arr.map { |row| row[3] = [row[3][:value], contact_color(row[3][:type])] }
+    arr.map do |row|
+      row[3] = [row[3][:value], contact_color(row[3][:type])] unless row[3].nil?
+    end
     @table.model_array = arr
   end
 
@@ -52,7 +55,7 @@ class TabStudents
           stretchy false
 
           @filter_last_name_initials = entry {
-            label 'ФИО'
+            label 'Фамилия И. О.'
           }
 
           @filters = {}
@@ -62,8 +65,8 @@ class TabStudents
             @filters[field[0]] = {}
 
             @filters[field[0]][:combobox] = combobox {
-              label "#{field[1]} есть?"
-              items ['Не важно', 'Да', 'Нет']
+              label "#{field[1]} имеется?"
+              items ['Не важно', 'Есть', 'Нет']
               selected 0
 
               on_selected do
@@ -88,12 +91,17 @@ class TabStudents
       vertical_box {
         @table = refined_table(
           table_editable: false,
+          filter: lambda do |row_hash, query|
+            utf8_query = query.force_encoding("utf-8")
+            row_hash['Фамилия И. О'].include?(utf8_query)
+          end,
           table_columns: {
             '#' => :text,
-            'ФИО' => :text,
+            'Фамилия И. О' => :text,
             'Гит' => :text,
             'Контакт' => :text_color
-          }
+          },
+          per_page: STUDENTS_PER_PAGE
         )
 
         @pages = horizontal_box {
@@ -124,10 +132,22 @@ class TabStudents
       vertical_box {
         stretchy false
 
-        button('Добавить') { stretchy false }
+        button('Добавить') {
+          stretchy false
+
+          on_clicked {
+            @controller.show_modal_add
+          }
+        }
         button('Изменить') { stretchy false }
         button('Удалить') { stretchy false }
-        button('Обновить') { stretchy false }
+        button('Обновить') {
+          stretchy false
+
+          on_clicked {
+            @controller.refresh_data(@current_page, STUDENTS_PER_PAGE)
+          }
+        }
       }
     }
     on_create
