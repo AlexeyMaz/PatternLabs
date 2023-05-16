@@ -1,3 +1,5 @@
+##
+# Репозиторий студентов с CRUD операциями.
 class StudentRepository
   def initialize(data_source_adapter)
     @data_source_adapter = data_source_adapter
@@ -7,6 +9,7 @@ class StudentRepository
     @data_source_adapter.student_by_id(student_id)
   end
 
+  ##
   # Получить page по счету count элементов (страница начинается с 1)
   def paginated_short_students(page, count, existing_data_list = nil)
     @data_source_adapter.paginated_short_students(page, count, existing_data_list)

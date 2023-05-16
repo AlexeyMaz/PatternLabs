@@ -20,6 +20,8 @@ class TabStudentsController
     LoggerClass.instance.debug('TabStudentsController: init done')
   end
 
+  ##
+  # Вызывается из view после ее создания
   def on_view_created
     begin
       @student_rep = StudentRepository.new(DBSourceAdapter.new)
@@ -29,6 +31,8 @@ class TabStudentsController
     end
   end
 
+  ##
+  # Показать модальное окно с добавлением студента
   def show_modal_add(current_page, per_page)
     LoggerClass.instance.debug('TabStudentsController: showing modal (add)')
     controller = StudentInputFormControllerCreate.new(self)
@@ -37,6 +41,8 @@ class TabStudentsController
     view.create.show
   end
 
+  ##
+  # Показать модальное окно с изменением выделенного студента
   def show_modal_edit(current_page, per_page, selected_row, edit)
     LoggerClass.instance.debug('TabStudentsController: showing modal (edit)')
     student_num = (current_page - 1) * per_page + selected_row
@@ -48,6 +54,8 @@ class TabStudentsController
     view.create.show
   end
 
+  ##
+  # Удалить выбранных студентов
   def delete_selected(current_page, per_page, selected_row)
     begin
       LoggerClass.instance.debug('TabStudentsController: deleting selected student')
@@ -60,6 +68,8 @@ class TabStudentsController
     end
   end
 
+  ##
+  # Обновить данные в таблице студентов
   def refresh_data(page, per_page)
     begin
       LoggerClass.instance.debug('TabStudentsController: refreshing data...')
@@ -72,6 +82,8 @@ class TabStudentsController
 
   private
 
+  ##
+  # Обработчик ошибки подключения к БД
   def on_db_conn_error(error)
     LoggerClass.instance.error('TabStudentsController: DB connection error:')
     LoggerClass.instance.error(error.message)
