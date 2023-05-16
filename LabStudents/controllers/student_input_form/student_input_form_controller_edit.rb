@@ -20,7 +20,7 @@ class StudentInputFormControllerEdit
       on_db_conn_error(e)
     end
     @existing_student = @student_rep.student_by_id(@existing_student_id)
-    @view.make_readonly(:git, :telegram, :email, :phone)
+    # @view.make_readonly(:git, :telegram, :email, :phone)
     populate_fields(@existing_student)
   end
 

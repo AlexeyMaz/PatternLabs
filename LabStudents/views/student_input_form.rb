@@ -1,15 +1,18 @@
 require 'glimmer-dsl-libui'
 require './LabStudents/controllers/student_input_form/student_input_form_controller_create'
 require './LabStudents/models/student_base'
+require_relative 'edit.rb'
 require 'win32api'
 
 class StudentInputForm
   include Glimmer
 
-  def initialize(controller, existing_student = nil)
+  def initialize(controller, edit, lamb, existing_student = nil)
     @existing_student = existing_student.to_hash unless existing_student.nil?
     @controller = controller
     @entries = {}
+    @edit = edit
+    @lamb = lamb
   end
 
   def on_create
@@ -24,11 +27,11 @@ class StudentInputForm
         @student_form = form {
           stretchy false
 
-          fields = [[:last_name, 'Фамилия', false], [:first_name, 'Имя', false], [:father_name, 'Отчество', false], [:git, 'Гит', true], [:telegram, 'Телеграм', true], [:email, 'Почта', true], [:phone, 'Телефон', true]]
-
+          fields = [[:last_name, 'Фамилия'], [:first_name, 'Имя'], [:father_name, 'Отчество'], [:git, 'Гит'], [:telegram, 'Телеграм'], [:email, 'Почта'], [:phone, 'Телефон']]
           fields.each do |field|
             @entries[field[0]] = entry {
               label field[1]
+              read_only @edit.edit(field[1])
             }
           end
         }
@@ -41,6 +44,7 @@ class StudentInputForm
             values.transform_values! { |v| v.empty? ? nil : v}
 
             @controller.process_fields(values)
+            @lamb.call
           }
         }
       }

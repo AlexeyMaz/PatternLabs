@@ -140,11 +140,27 @@ class TabStudents
           }
         }
 
-        button('Изменить') {
+        button('Изменить ФИО') {
           stretchy false
 
           on_clicked {
-            @controller.show_modal_edit(@current_page, STUDENTS_PER_PAGE, @table.selection) unless @table.selection.nil?
+            @controller.show_modal_edit(@current_page, STUDENTS_PER_PAGE, @table.selection, FIO.new) unless @table.selection.nil?
+          }
+        }
+
+        button('Изменить контакты') {
+          stretchy false
+
+          on_clicked {
+            @controller.show_modal_edit(@current_page, STUDENTS_PER_PAGE, @table.selection, Contact.new) unless @table.selection.nil?
+          }
+        }
+
+        button('Изменить гит') {
+          stretchy false
+
+          on_clicked {
+            @controller.show_modal_edit(@current_page, STUDENTS_PER_PAGE, @table.selection, Git.new) unless @table.selection.nil?
           }
         }
 
