@@ -1,6 +1,8 @@
 require './LabStudents/util/logger'
 require 'win32api'
 
+##
+# Контроллер для модального окна изменения студента
 class StudentInputFormControllerEdit
   def initialize(parent_controller, existing_student_id)
     @parent_controller = parent_controller
@@ -13,6 +15,8 @@ class StudentInputFormControllerEdit
     LoggerClass.instance.debug('StudentInputFormControllerEdit: view set')
   end
 
+  ##
+  # Вызывается из view после ее создания
   def on_view_created
     begin
       @student_rep = StudentRepository.new(DBSourceAdapter.new)
@@ -24,6 +28,8 @@ class StudentInputFormControllerEdit
     populate_fields(@existing_student)
   end
 
+  ##
+  # Заполнить имеющиеся данные о студенте
   def populate_fields(student)
     @view.set_value(:last_name, student.last_name)
     @view.set_value(:first_name, student.first_name)
@@ -34,6 +40,8 @@ class StudentInputFormControllerEdit
     @view.set_value(:phone, student.phone)
   end
 
+  ##
+  # Обработать данные из полей и добавить студента
   def process_fields(fields)
     begin
       new_student = Student.from_hash(fields)
@@ -52,6 +60,8 @@ class StudentInputFormControllerEdit
 
   private
 
+  ##
+  # Обработчик ошибки подключения к БД
   def on_db_conn_error(error)
     LoggerClass.instance.debug('StudentInputFormControllerEdit: DB connection error:')
     LoggerClass.instance.error(error.message)

@@ -136,7 +136,7 @@ class TabStudents
           stretchy false
 
           on_clicked {
-            @controller.show_modal_add
+            @controller.show_modal_add(@current_page, STUDENTS_PER_PAGE)
           }
         }
 

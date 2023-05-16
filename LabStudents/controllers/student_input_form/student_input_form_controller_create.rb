@@ -1,6 +1,8 @@
 require './LabStudents/util/logger'
 require 'win32api'
 
+##
+# Контроллер для модального окна создания студента
 class StudentInputFormControllerCreate
   def initialize(parent_controller)
     @parent_controller = parent_controller
@@ -12,6 +14,8 @@ class StudentInputFormControllerCreate
     LoggerClass.instance.debug('StudentInputFormControllerCreate: view set')
   end
 
+  ##
+  # Вызывается из view после ее создания
   def on_view_created
     begin
       @student_rep = StudentRepository.new(DBSourceAdapter.new)
@@ -20,6 +24,8 @@ class StudentInputFormControllerCreate
     end
   end
 
+  ##
+  # Обработать данные из полей и добавить студента
   def process_fields(fields)
     begin
       last_name = fields.delete(:last_name)
@@ -43,6 +49,8 @@ class StudentInputFormControllerCreate
 
   private
 
+  ##
+  # Обработчик ошибки подключения к БД
   def on_db_conn_error(error)
     LoggerClass.instance.debug('StudentInputFormControllerCreate: DB connection error:')
     LoggerClass.instance.error(error.message)

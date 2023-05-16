@@ -9,6 +9,8 @@ require './LabStudents/views/edit.rb'
 require './LabStudents/util/logger'
 require 'win32api'
 
+##
+# Контроллер для вкладки со списком студентов
 class TabStudentsController
   def initialize(view)
     LoggerClass.instance.debug('TabStudentsController: init start')
@@ -27,10 +29,10 @@ class TabStudentsController
     end
   end
 
-  def show_modal_add
+  def show_modal_add(current_page, per_page)
     LoggerClass.instance.debug('TabStudentsController: showing modal (add)')
     controller = StudentInputFormControllerCreate.new(self)
-    view = StudentInputForm.new(controller, AddAll.new)
+    view = StudentInputForm.new(controller, AddAll.new, lambda {refresh_data(current_page, per_page)})
     controller.set_view(view)
     view.create.show
   end
