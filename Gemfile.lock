@@ -3,14 +3,18 @@ GEM
   specs:
     array_include_methods (1.4.0)
     ast (2.4.2)
+    augmentation (1.0.0)
+      win32api
     chunky_png (1.4.0)
     color (1.8)
+    daemons (1.4.1)
     equalizer (0.0.11)
+    eventmachine (1.2.7)
     facets (3.1.0)
     glimmer (2.7.3)
       array_include_methods (~> 1.4.0)
       facets (>= 3.1.0, < 4.0.0)
-    glimmer-dsl-libui (0.7.5)
+    glimmer-dsl-libui (0.7.7)
       chunky_png (~> 1.4.0)
       color (~> 1.8)
       equalizer (= 0.0.11)
@@ -21,11 +25,12 @@ GEM
       rouge (>= 3.26.0, < 4.0.0)
       super_module (~> 1.4.1)
     json (2.6.3)
-    libui (0.1.2.pre)
     libui (0.1.2.pre-x64-mingw)
     matrix (0.4.2)
     method_source (1.0.0)
-    minitest (5.16.3)
+    minitest (5.18.0)
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.5)
     os (1.1.4)
     parallel (1.23.0)
@@ -34,11 +39,14 @@ GEM
     perfect-shape (1.0.7)
       equalizer (>= 0.0.11, < 1.1.0)
       matrix (>= 0.4.2, < 1.1.0)
+    rack (2.2.7)
+    rack-protection (3.0.6)
+      rack
     rainbow (3.1.1)
     regexp_parser (2.8.0)
     rexml (3.2.5)
     rouge (3.30.0)
-    rubocop (1.50.2)
+    rubocop (1.51.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
@@ -51,21 +59,34 @@ GEM
     rubocop-ast (1.28.1)
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
+    ruby2_keywords (0.0.5)
+    sinatra (3.0.6)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.6)
+      tilt (~> 2.0)
     super_module (1.4.1)
       method_source (>= 0.8.2, < 1.1.0)
+    thin (1.8.2)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
+    tilt (2.1.0)
     unicode-display_width (2.4.2)
     win32api (0.1.0)
 
 PLATFORMS
   x64-mingw-ucrt
-  x86-mingw32
 
 DEPENDENCIES
+  augmentation
   glimmer-dsl-libui (~> 0.7.4)
   minitest
   mysql2
   rubocop
+  sinatra (~> 3.0, >= 3.0.6)
+  thin (~> 1.8, >= 1.8.2)
   win32api
 
 BUNDLED WITH
-   2.4.10
+   2.4.13
